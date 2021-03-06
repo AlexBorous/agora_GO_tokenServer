@@ -13,6 +13,7 @@ import (
 
 var appID = "7316fb9fa9f544cbb642c3a16f33935b"
 var appCertificate = "51e3fcb7a70641e29bba91b70a72291a"
+var token = "0067316fb9fa9f544cbb642c3a16f33935bIADyX0HaVJSBZQOFC+gWAqaqOaVX5Zz5TZG9v0Zui/cJ9QOam8IAAAAAEADqgOQ9lvJEYAEAAQCW8kRg"
 
 func main() {
 
@@ -26,6 +27,8 @@ func main() {
 
 	api.Use(nocache())
 	api.GET("rtc/:channelName/:role/:tokentype/:uid/", getRtcToken)
+	api.GET("get/:appID/", getToken)
+	api.GET("chat_integration/:appID/:token/", setToken)
 	api.GET("rtm/:uid/", getRtmToken)
 	api.GET("rte/:channelName/:role/:tokentype/:uid/", getBothTokens)
 	api.Run(":8080") // listen and serve on localhost:8080
@@ -40,7 +43,31 @@ func nocache() gin.HandlerFunc {
 		c.Header("Access-Control-Allow-Origin", "*")
 	}
 }
+func getToken(c *gin.Context) {
+	var appid string
+	appid = c.Param("appID")
+	if appid == appID {
+		log.Println("RTC Token ")
+		c.JSON(200, gin.H{
+			"rtcToken": token,
+		})
 
+	}
+
+}
+func setToken(c *gin.Context) {
+	var appid string
+	appid = c.Param("appID")
+	if appid == appID {
+		token = c.Param("token")
+		log.Println("RTC Token ")
+		c.JSON(200, gin.H{
+			"rtcToken": token,
+		})
+	} else {
+		log.Println("EEEE")
+	}
+}
 func getRtcToken(c *gin.Context) {
 	log.Printf("rtc token\n")
 	// get param values
