@@ -33,6 +33,7 @@ func main() {
 	api.GET("chat_integration/:appID/:token/", setToken)
 	api.GET("rtm/:uid/", getRtmToken)
 	api.GET("rte/:channelName/:role/:tokentype/:uid/", getBothTokens)
+	api.RUN(GetPort())
 	err := http.ListenAndServe(GetPort(), nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
